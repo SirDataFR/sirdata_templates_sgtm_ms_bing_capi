@@ -669,6 +669,7 @@ if (isAdblocked || !data.sendWhenAdblockedOnly) {
   let headersToSend = {
     'x-forwarded-for': userIp,
     'cache-control': 'no-cache',
+    'accept': 'image/*',
   };
 
   const xForwardedProto = getValueFromHeader('x-forwarded-proto');
@@ -688,11 +689,6 @@ if (isAdblocked || !data.sendWhenAdblockedOnly) {
   let ua = getValueFromHeader('gtm-helper-device-user-agent') || getValueFromHeader('user-agent');
   if (ua) {
     headersToSend['user-agent'] = ua;
-  }
-
-  let accept = getValueFromHeader('accept');
-  if (accept) {
-    headersToSend.accept = accept;
   }
 
   let acceptEncoding = getValueFromHeader('accept-encoding');
@@ -1277,21 +1273,6 @@ ___SERVER_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "gtm-helper-server-domain"
-                  }
-                ]
-              },
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "headerName"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
-                    "string": "accept"
                   }
                 ]
               },
