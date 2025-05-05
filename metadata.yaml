@@ -15,5 +15,5 @@
 homepage: "https://sgtm.sirdata.io"
 documentation: "https://server-side.docs.sirdata.net/sirdata-server-side/english-1"
 versions:
-  - sha: cc789ce6931335f72d7047231cfa0af04b0bbf3b
-    changeNotes: initial release
+  - sha: 863b6ad9485ff2c5593fdb0ff31bb4fc6bba31c0
+    changeNotes: fix ea value
