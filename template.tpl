@@ -632,15 +632,15 @@ if (msEventName == "custom") {
   }
   paramsToSend.ec = getNonEmptyValueOnly(data.ec) || getEventData('category') || getEventData('pageCategory') || contentCategory;
   paramsToSend.ecomm_category = paramsToSend.ec;
-  paramsToSend.ea = getNonEmptyValueOnly(data.ea) || msEventName;
-  paramsToSend.el = getNonEmptyValueOnly(data.el) || getEventData('label') || msEventName;
+  paramsToSend.gv = getEventData('value');
+  paramsToSend.ea = getNonEmptyValueOnly(data.ea) || eventName;
+  paramsToSend.el = getNonEmptyValueOnly(data.el) || getEventData('label') || eventName;
   paramsToSend.ev = getNonEmptyValueOnly(data.ev) || paramsToSend.gv;
   paramsToSend.prodid = items_id();
   paramsToSend.search_term = getNonEmptyValueOnly(data.searchTerm) || getEventData('search_term');
   paramsToSend.items =  items();
   paramsToSend.transaction_id = getEventData('transaction_id');
   paramsToSend.gc = getEventData('currency');
-  paramsToSend.gv = getEventData('value');
 }
 if (em) {
   paramsToSend.pid = "em="+em;
