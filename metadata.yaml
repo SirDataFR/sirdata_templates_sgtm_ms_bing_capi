@@ -15,5 +15,5 @@
 homepage: "https://sgtm.sirdata.io"
 documentation: "https://server-side.docs.sirdata.net/sirdata-server-side/english-1"
 versions:
-  - sha: ce88f2ee70c0eb05364fb9b6e1badaa2bf46f4b7
-    changeNotes: changed logo
+  - sha: d5529cc014ce4275876f5134b96896adcee6f53a
+    changeNotes: update id
