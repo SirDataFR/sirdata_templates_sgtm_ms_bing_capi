@@ -10,8 +10,8 @@ ___INFO___
 
 {
   "type": "TAG",
-  "id": "sirdata_templates_sgtm_ms_bing_capi",
-  "version": 1.0,
+  "id": "cvt_NC64L",
+  "version": 1.1,
   "securityGroups": [],
   "displayName": "GDPR Ready Bing/Microsoft Ads Conversions by Sirdata",
   "categories": [
