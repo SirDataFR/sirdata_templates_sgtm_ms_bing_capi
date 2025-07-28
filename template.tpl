@@ -384,6 +384,51 @@ const gcsParam = getRequestQueryParameter('gcs') || eventData['x-ga-gcs'];
 const consentGranted = (getValueFromHeader('gtm-helper-consent-personalized-ads') === 'true' || (gcsParam && gcsParam[2]=='1') || (getValueFromHeader('gtm-helper-gdpr-applies') === 'false' && !gcsParam)) ? true : false;
 const msCookiesAllowed = consentGranted && (eventName == 'page_view' || data.eventName !== 'inherit');
 
+const getValidHost = function (host) {
+  return (isValidHost(host) ? host : null);
+};
+const url = eventData.page_location || getRequestHeader('referer') || getValueFromHeader('gtm-helper-site-origin');
+const originDomain = getValueFromHeader('gtm-helper-site-domain') || computeEffectiveTldPlusOne(url);
+const sstDomain = getValueFromHeader('gtm-helper-server-domain');
+const cookieDomain = sstDomain || originDomain;
+const sstHost = getValueFromHeader('gtm-helper-server-host') || getValidHost(getValueFromHeader('host'));
+
+const deleteUETCookie = function (clickIdCookieName, domain, httponly) {
+    let options = {'max-age': -1, sameSite: 'none', secure: true, httpOnly: httponly, path: '/'};
+    if (domain) {
+      options.domain = "." + domain;
+    }
+    setCookie(clickIdCookieName, '', options);
+};
+
+let sidFromCookie = getCookieValues('_uetsid')[0];
+let vidFromCookie = getCookieValues('_uetvid')[0];
+let msclkidFromCookie = getCookieValues('_uetmsclkid')[0];
+let cookieMUID = getCookieValues('_uet_ss_MUID')[0];
+let cookieMSPTC = getCookieValues('_uet_ss_MSPTC')[0];
+if (!consentGranted) {
+  if (sidFromCookie) {
+    sidFromCookie = '';
+    deleteUETCookie('_uetsid', cookieDomain, false);
+  }
+  if (vidFromCookie) {
+    vidFromCookie = '';
+    deleteUETCookie('_uetvid', cookieDomain, false);
+  }
+  if (msclkidFromCookie) {
+    msclkidFromCookie = '';
+    deleteUETCookie('_uetmsclkid', cookieDomain, false);
+  }
+  if (cookieMUID) {
+    cookieMUID = '';
+    deleteUETCookie('_uet_ss_MUID', sstHost, true);
+  }
+  if (cookieMSPTC) {
+    cookieMSPTC = '';
+    deleteUETCookie('_uet_ss_MSPTC', sstHost, true);
+  }
+}
+
 if (
     !data.tag_id ||
     (!data.sendWithoutConsent && !consentGranted) ||
@@ -452,20 +497,12 @@ const isValidHost = function (host) {
   return testRegex(domainRegex,host);
 };
 
-const getValidHost = function (host) {
-  return (isValidHost(host) ? host : null);
-};
-
 const userIp = getValueFromHeader('gtm-helper-user-ip') || eventData.ip_override || getValueFromHeader('x-appengine-user-ip');
-const url = eventData.page_location || getRequestHeader('referer') || getValueFromHeader('gtm-helper-site-origin');
+
 const urlParsed = parseUrl(url);
 const referrer = eventData.page_referrer;
 const referrerParsed = parseUrl(referrer);
-const originDomain = getValueFromHeader('gtm-helper-site-domain') || computeEffectiveTldPlusOne(url);
 const originHost = getValueFromHeader('gtm-helper-site-host');
-const sstDomain = getValueFromHeader('gtm-helper-server-domain');
-const cookieDomain = sstDomain || originDomain;
-const sstHost = getValueFromHeader('gtm-helper-server-host') || getValidHost(getValueFromHeader('host'));
 const screenResolution = getEventData('screen_resolution');
 
 const defaultHomeFiles = [
@@ -560,7 +597,6 @@ if (url) {
 
 if (consentGranted) {  
   sidSeed = sidSeed || getNonEmptyValueOnly(getEventData('ga_session_id'));
-  const sidFromCookie = getCookieValues('_uetsid')[0];
   if (sidFromCookie) {
     sid = sidFromCookie;
   } else if (data.createCookie) {
@@ -569,7 +605,6 @@ if (consentGranted) {
   }
   
   vidSeed = vidSeed || getNonEmptyValueOnly(getEventData('client_id'));
-  const vidFromCookie = getCookieValues('_uetvid')[0];
   if (vidFromCookie) {
     vid = vidFromCookie;
   } else if (data.createCookie) {
@@ -577,10 +612,8 @@ if (consentGranted) {
     setUETCookie('_uetvid', vid, cookieDomain, 31536000);
   }
   
-  const msclkidFromCookie = getCookieValues('_uetmsclkid')[0];
-  
   if (data.createCookie && msclkid !== 'N' && (!msclkidFromCookie || !data.firstClick)) {
-    setUETCookie('_uetmsclkid', "_uet" + msclkid, cookieDomain, 31536000);
+    setUETCookie('_uetmsclkid', '_uet' + msclkid, cookieDomain, 31536000);
   }
 
   if (msclkidFromCookie && (msclkid == 'N' || data.firstClick)) {
@@ -730,11 +763,9 @@ if (isAdblocked || !data.sendWhenAdblockedOnly) {
 
   if (consentGranted) {
     let cookieValues = [];
-    const cookieMUID = getCookieValues('_uet_ss_MUID')[0];
     if (cookieMUID) {
       cookieValues.push('MUID='+ cookieMUID);
     }
-    const cookieMSPTC = getCookieValues('_uet_ss_MSPTC')[0];
     if (cookieMSPTC) {
       cookieValues.push('MSPTC='+ cookieMSPTC);
     }
