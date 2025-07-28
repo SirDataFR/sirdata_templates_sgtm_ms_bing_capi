@@ -15,5 +15,5 @@
 homepage: "https://sgtm.sirdata.io"
 documentation: "https://server-side.docs.sirdata.net/sirdata-server-side/english-1"
 versions:
-  - sha: 59ed927ef52073972a45862d9195e0005f16069e
-    changeNotes: fix path for cookie
+  - sha: 7f6f80406b56f40bda7ccbe19df99232ed283bcc
+    changeNotes: remove cookies when consent is withdrawn
