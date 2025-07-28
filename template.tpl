@@ -436,7 +436,7 @@ const getStartOfHourUtc = function (ts) {
 
 const setUETCookie = function (clickIdCookieName, msclkid, domain, duration) {
     if (!msclkid || msclkid === 'N') { return; }
-    let options = {"max-age": duration, httpOnly: false};
+    let options = {'max-age': duration, sameSite: 'none', secure: true, httpOnly: false, path: '/'};
     if (domain) {
       options.domain = "." + domain;
     }
@@ -512,7 +512,7 @@ const processSetCookiesHeaders = function (headers) {
         let cookieName = parts[0].trim();
         if (cookieName === 'MUID' || cookieName === 'MSPTC') {
           let cookieValue = parts[1].split(';')[0].trim();
-          let options = {'max-age': 31536000, httpOnly: true, sameSite: "none", secure: true, domain: sstHost};
+          let options = {'max-age': 31536000, httpOnly: true, sameSite: 'none', secure: true, domain: sstHost, path: '/'};
           setCookie('_uet_ss_' + cookieName, cookieValue, options);
         }
       });
