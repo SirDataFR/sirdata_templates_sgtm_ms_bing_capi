@@ -15,5 +15,5 @@
 homepage: "https://sgtm.sirdata.io"
 documentation: "https://server-side.docs.sirdata.net/sirdata-server-side/english-1"
 versions:
-  - sha: db29eb2cd883a0a4248d48712191ac633edec15a
-    changeNotes: fix email test
+  - sha: 59ed927ef52073972a45862d9195e0005f16069e
+    changeNotes: fix path for cookie
